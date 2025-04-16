@@ -72,7 +72,7 @@ const LoginScreen = ({ navigation }: { navigation: LoginScreenProps }) => {
       />
       <TouchableOpacity
         onPress={() => {
-          console.log("Forgot Password");
+          navigation.navigate("ForgotPassword");
         }}
         style={{ marginBottom: 20 }}
       >
