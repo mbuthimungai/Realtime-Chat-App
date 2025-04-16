@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, StyleSheet, Dimensions } from "react-native";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import AppTextInput from "../components/AppTextInput";
+import App from "../../App";
 
+const { width } = Dimensions.get("window");
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const auth = FIREBASE_AUTH;
   const register = async () => {
     setLoading(true);
@@ -28,36 +32,25 @@ const RegisterScreen = () => {
     }
   };
   return (
-    <View>
-      <Text>Register</Text>
-      <TextInput
+    <View style={styles.container}>
+      <Text style={styles.heading}>Register</Text>
+      <AppTextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
         keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          padding: 10,
-          marginBottom: 10,
-        }}
+        style={styles.input}
       />
-      <TextInput
-        placeholder="password"
+      <AppTextInput
+        placeholder="Password"
         value={password}
         onChangeText={(text) => setPassword(text)}
-        secureTextEntry={false}
-        autoCapitalize="none"
-        autoCorrect={false}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          padding: 10,
-          marginBottom: 10,
-        }}
+        secureTextEntry={secureTextEntry}
+        keyboardType="default"
+        style={styles.input}
+        toggleSecureEntry={() => setSecureTextEntry((prev) => !prev)}
       />
+
       {!loading ? (
         <TouchableOpacity
           onPress={register}
@@ -76,5 +69,25 @@ const RegisterScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingTop: 100,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  input: {
+    width: width - 20,
+    paddingVertical: 15,
+    marginBottom: 20,
+    borderRadius: 100,
+  },
+});
 
 export default RegisterScreen;
