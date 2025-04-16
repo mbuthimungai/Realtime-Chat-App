@@ -18,5 +18,8 @@ const AuthNavigation = () => {
     </stack.Navigator>
   );
 };
-
+export type AuthStackParamList = {
+  Register: undefined;
+  Login: undefined;
+};
 export default AuthNavigation;
