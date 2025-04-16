@@ -9,6 +9,11 @@ dist/
 web-build/
 expo-env.d.ts
 
+yarn.lcok
+.vscode/
+.config
+.env
+.env.*
 # Native
 *.orig.*
 *.jks
