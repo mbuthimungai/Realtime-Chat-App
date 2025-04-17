@@ -16,12 +16,14 @@ export default {
     },
     ios: {
       supportsTablet: true,
+      bundleIdentifier: "com.mbuthimungai.realtime-chat-app",
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
+      package: "com.mbuthimungai.realtimechatapp",
     },
     web: {
       favicon: "./assets/favicon.png",

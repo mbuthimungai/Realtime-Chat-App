@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { View, Text } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useDispatch } from "react-redux";
 import AppTextInput from "../components/AppTextInput";
 import colors from "../../assets/colors";
 import AppButton from "../components/AppButton";
-
-const { width } = Dimensions.get("window");
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../navigation/AuthNavigation";
 import AppLoader from "../components/AppLoader";
+import { setUser } from "../state/reducers/userReducer";
+
+const { width } = Dimensions.get("window");
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -33,6 +30,7 @@ const RegisterScreen = ({
   const [secureTextEntry, setSecureTextEntry] = useState([true, true]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const auth = FIREBASE_AUTH;
+  const dispatch = useDispatch();
   const register = async () => {
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -45,7 +43,15 @@ const RegisterScreen = ({
         email,
         password
       );
-      console.log(response);
+      dispatch(
+        setUser({
+          id: response.user.uid,
+          email: response.user.email || "",
+          name: response.user.displayName || "",
+          idToken: await response.user.getIdToken(),
+          refreshToken: response.user.refreshToken,
+        })
+      );
       return response;
     } catch (err: any) {
       alert(err.message);
