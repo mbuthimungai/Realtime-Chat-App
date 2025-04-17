@@ -14,6 +14,8 @@ yarn.lcok
 .config
 .env
 .env.*
+ios/
+android/
 # Native
 *.orig.*
 *.jks

@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  ActivityIndicator,
   StyleSheet,
   Dimensions,
 } from "react-native";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useDispatch } from "react-redux";
 import colors from "../../assets/colors";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
 import AppLoader from "../components/AppLoader";
 import { AuthStackParamList } from "../navigation/AuthNavigation";
+import { setUser } from "../state/reducers/userReducer";
 
 type LoginScreenProps = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
@@ -26,12 +26,21 @@ const LoginScreen = ({ navigation }: { navigation: LoginScreenProps }) => {
   const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState([true, true]);
   const auth = FIREBASE_AUTH;
+  const dispatch = useDispatch();
 
   const login = async () => {
-    console.log("login");
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
+      dispatch(
+        setUser({
+          id: response.user.uid,
+          email: response.user.email || "",
+          name: response.user.displayName || "",
+          idToken: await response.user.getIdToken(),
+          refreshToken: response.user.refreshToken,
+        })
+      );
       return response;
     } catch (err: any) {
       alert(err.message);
